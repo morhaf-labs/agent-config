@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+apm_modules/
+build/
+dist/
+.agents/skills/deploy-to-morhaf-vps/
+.claude/skills/deploy-to-morhaf-vps/

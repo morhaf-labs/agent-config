@@ -1,0 +1,4 @@
+[tools]
+python = "3.14.7"
+"pipx:apm-cli" = "0.28.0"
+"pipx:skills-ref" = "0.1.1"

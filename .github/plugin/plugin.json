@@ -1,0 +1,16 @@
+{
+  "name": "agent-config",
+  "version": "0.1.0",
+  "description": "Non-secret Morhaf Labs project conventions for coding agents",
+  "author": {
+    "name": "Morhaf Labs"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/morhaf-labs/agent-config",
+  "repository": "https://github.com/morhaf-labs/agent-config",
+  "keywords": [
+    "deployment",
+    "morhaf-labs",
+    "skills"
+  ]
+}

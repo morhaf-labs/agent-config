@@ -1,0 +1,34 @@
+{
+  "name": "hybrid-cloudflare-runner",
+  "components": [
+    {
+      "path": "runner/**",
+      "additional_paths": ["shared/**", ".dockerignore"],
+      "runtime": "vps",
+      "platform_application": "example-runner",
+      "workflow": {
+        "uses": "morhaf-labs/vps-infra-v2/.github/workflows/deploy-to-platform.yml@54ed7b8113c961802b377f0701426f763e1e7be4",
+        "inputs": ["app", "dockerfile"],
+        "credentials": ["PLATFORM_APP_PRIVATE_KEY"]
+      },
+      "application": {
+        "tier": "burstable",
+        "memory": "1280Mi",
+        "memoryRequest": "320Mi",
+        "cpu": "1500m",
+        "cpuRequest": "100m",
+        "port": 3000,
+        "health": "/health",
+        "user": 1000
+      },
+      "direct_actions": []
+    },
+    {
+      "path": "app/**",
+      "additional_paths": ["server/**"],
+      "runtime": "cloudflare",
+      "direct_actions": []
+    }
+  ],
+  "expected_owners": ["vps-infra-v2", "repository-cloudflare"]
+}
