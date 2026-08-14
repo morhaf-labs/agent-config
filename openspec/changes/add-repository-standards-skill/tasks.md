@@ -31,5 +31,6 @@ Coordinated as tasks 3.5-3.6 and 6.6.
 - [x] 3.2 Move validation and release jobs to Blacksmith, keeping the local workflow and
   community health exception a public repository cannot inherit.
 - [x] 3.3 Bump the manifest to 0.2.0 and run the full local validation the workflow runs.
-- [ ] 3.4 👤 **CHECKPOINT** Review and merge, then tag `v0.2.0` and verify the published
-  artifact, its checksum and the absence of private content.
+- [x] 3.4 👤 **CHECKPOINT** Review and merge, then tag `v0.2.0` and verify the published
+  artifact, its checksum and the absence of private content. Operator delegated this on
+  2026-08-14; merged as `e8e43e60`, released `v0.2.0`. See `evidence.md`.
