@@ -1,0 +1,63 @@
+name: Validate
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: validate-${{ github.repository }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  package:
+    name: Package and target validation
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
+
+      - uses: jdx/mise-action@5228313ee0372e111a38da051671ca30fc5a96db # v3
+        with:
+          version: 2026.8.5
+          sha256: ee362b6d96c648e27325a8bc7ee866bde4fffc20c88c777c5eb5c3b5c6f3e226
+
+      - name: Run producer tests
+        run: python -m unittest discover -s tests -v
+
+      - name: Validate skill structure
+        run: agentskills validate .apm/skills/deploy-to-morhaf-vps
+
+      - name: Audit publishable content
+        shell: bash
+        run: |
+          apm audit --ci --no-policy --no-fail-fast
+          while IFS= read -r path; do
+            apm audit --file "$path"
+          done < <(find .apm -type f -name '*.md' -print)
+
+      - name: Pack and verify release artifact
+        shell: bash
+        run: |
+          pack_dir="$(mktemp -d)"
+          install_dir="$(mktemp -d)"
+          apm pack --dry-run --marketplace none --verbose
+          apm pack --archive --marketplace none --output "$pack_dir"
+          shopt -s nullglob
+          bundles=("$pack_dir"/agent-config-*.zip)
+          test "${#bundles[@]}" -eq 1
+          bundle="${bundles[0]}"
+          python tests/verify_release.py "$bundle"
+          apm install "$bundle" --dry-run --target codex,copilot,claude --root "$install_dir" --no-policy
+          apm install "$bundle" --target codex,copilot,claude --root "$install_dir" --no-policy
+          diff -r .apm/skills/deploy-to-morhaf-vps "$install_dir/.agents/skills/deploy-to-morhaf-vps"
+          diff -r .apm/skills/deploy-to-morhaf-vps "$install_dir/.claude/skills/deploy-to-morhaf-vps"
+          git diff --exit-code
+          test -z "$(git status --short)"

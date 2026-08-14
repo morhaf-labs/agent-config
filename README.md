@@ -40,17 +40,22 @@ The supported toolchain is pinned in `mise.toml`:
 
 - Python 3.14.7
 - Microsoft APM CLI 0.28.0
+- Agent Skills reference validator 0.1.1
 
 Run:
 
 ```sh
 mise install
 python -m unittest discover -s tests -v
-apm compile --validate --local-only
-apm install --dry-run --target codex,copilot,claude
+agentskills validate .apm/skills/deploy-to-morhaf-vps
 apm audit --ci --no-policy
-apm pack --dry-run --marketplace none
+apm pack --dry-run --marketplace none --verbose
 ```
+
+`apm compile` is intentionally absent. It validates instruction and agent compilation,
+while this package contains only a skill. CI packs the skill into an integrity-locked
+archive, audits that artifact, and installs it into clean Codex, Copilot and Claude
+targets.
 
 Releases are reviewed pull requests followed by immutable `v*` tags. CI builds and
 audits the release artifact; release notes are generated from the reviewed artifact.
