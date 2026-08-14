@@ -1,0 +1,19 @@
+name: Public APM audit fixture
+
+on:
+  pull_request:
+    paths:
+      - .agents/**
+      - .claude/skills/**
+      - .github/workflows/apm-audit-fixture.yml
+      - apm.lock.yaml
+      - apm.yml
+
+permissions:
+  contents: read
+
+jobs:
+  apm-audit:
+    uses: morhaf-labs/.github/.github/workflows/apm-audit.yml@93f1b3638544368a1c203bece4770d16b6f61e71
+    with:
+      runner: ubuntu-latest

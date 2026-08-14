@@ -1,5 +1,182 @@
 lockfile_version: '1'
-generated_at: '2026-08-14T08:07:38.472266+00:00'
+generated_at: '2026-08-14T12:10:00.881473+00:00'
 apm_version: 0.28.0
-dependencies: []
-deployments: []
+dependencies:
+- repo_url: morhaf-labs/agent-config
+  name: agent-config
+  host: github.com
+  resolved_commit: 794254e63ef85201d509437abb4dc502b9c7c2c3
+  resolved_ref: v0.1.1
+  version: 0.1.1
+  package_type: marketplace_plugin
+  deployed_files:
+  - .agents/skills/deploy-to-morhaf-vps
+  - .agents/skills/deploy-to-morhaf-vps/SKILL.md
+  - .agents/skills/deploy-to-morhaf-vps/references/post-release-verification.md
+  - .agents/skills/deploy-to-morhaf-vps/references/release-caller-review.md
+  - .agents/skills/deploy-to-morhaf-vps/references/runtime-ownership.md
+  - .agents/skills/deploy-to-morhaf-vps/references/vps-application-contract.md
+  - .claude/skills/deploy-to-morhaf-vps
+  - .claude/skills/deploy-to-morhaf-vps/SKILL.md
+  - .claude/skills/deploy-to-morhaf-vps/references/post-release-verification.md
+  - .claude/skills/deploy-to-morhaf-vps/references/release-caller-review.md
+  - .claude/skills/deploy-to-morhaf-vps/references/runtime-ownership.md
+  - .claude/skills/deploy-to-morhaf-vps/references/vps-application-contract.md
+  deployed_file_hashes:
+    .agents/skills/deploy-to-morhaf-vps/SKILL.md: sha256:f3703ce2f0793f8c132e9f38eaca83a36a6a9c0d179501513198638cd17a0f9c
+    .agents/skills/deploy-to-morhaf-vps/references/post-release-verification.md: sha256:794a628a05a1b2b4f32f2c255cf583d18889c196a0445dcd1af19d7d5a370fb6
+    .agents/skills/deploy-to-morhaf-vps/references/release-caller-review.md: sha256:84617acf73abc77cd28d16cfce326bded214a7bb99ffa5a20ac175f016b2f17a
+    .agents/skills/deploy-to-morhaf-vps/references/runtime-ownership.md: sha256:7ce12dc092731059361f5bf29ddca0f27ceb8ac06436f7e1d68724309e6c8ad5
+    .agents/skills/deploy-to-morhaf-vps/references/vps-application-contract.md: sha256:71ca8a3ed91a4a7340574fedccd868a59d81618b28616966e75674f90d3d8078
+    .claude/skills/deploy-to-morhaf-vps/SKILL.md: sha256:f3703ce2f0793f8c132e9f38eaca83a36a6a9c0d179501513198638cd17a0f9c
+    .claude/skills/deploy-to-morhaf-vps/references/post-release-verification.md: sha256:794a628a05a1b2b4f32f2c255cf583d18889c196a0445dcd1af19d7d5a370fb6
+    .claude/skills/deploy-to-morhaf-vps/references/release-caller-review.md: sha256:84617acf73abc77cd28d16cfce326bded214a7bb99ffa5a20ac175f016b2f17a
+    .claude/skills/deploy-to-morhaf-vps/references/runtime-ownership.md: sha256:7ce12dc092731059361f5bf29ddca0f27ceb8ac06436f7e1d68724309e6c8ad5
+    .claude/skills/deploy-to-morhaf-vps/references/vps-application-contract.md: sha256:71ca8a3ed91a4a7340574fedccd868a59d81618b28616966e75674f90d3d8078
+  content_hash: sha256:8e08b9dc1bc972f9e37459d2c8fcd49a6d76d01343e40b6ba0911cd4d468f9f5
+  declared_license: MIT
+deployments:
+- kind: project-relative
+  target: claude
+  value: .claude/skills/deploy-to-morhaf-vps
+  runtime: null
+  scope: project
+  owners:
+  - morhaf-labs/agent-config
+  - .
+  active_owner: morhaf-labs/agent-config
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/deploy-to-morhaf-vps/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - morhaf-labs/agent-config
+  - .
+  active_owner: morhaf-labs/agent-config
+  content_hash: sha256:f3703ce2f0793f8c132e9f38eaca83a36a6a9c0d179501513198638cd17a0f9c
+- kind: project-relative
+  target: claude
+  value: .claude/skills/deploy-to-morhaf-vps/references/post-release-verification.md
+  runtime: null
+  scope: project
+  owners:
+  - morhaf-labs/agent-config
+  - .
+  active_owner: morhaf-labs/agent-config
+  content_hash: sha256:794a628a05a1b2b4f32f2c255cf583d18889c196a0445dcd1af19d7d5a370fb6
+- kind: project-relative
+  target: claude
+  value: .claude/skills/deploy-to-morhaf-vps/references/release-caller-review.md
+  runtime: null
+  scope: project
+  owners:
+  - morhaf-labs/agent-config
+  - .
+  active_owner: morhaf-labs/agent-config
+  content_hash: sha256:84617acf73abc77cd28d16cfce326bded214a7bb99ffa5a20ac175f016b2f17a
+- kind: project-relative
+  target: claude
+  value: .claude/skills/deploy-to-morhaf-vps/references/runtime-ownership.md
+  runtime: null
+  scope: project
+  owners:
+  - morhaf-labs/agent-config
+  - .
+  active_owner: morhaf-labs/agent-config
+  content_hash: sha256:7ce12dc092731059361f5bf29ddca0f27ceb8ac06436f7e1d68724309e6c8ad5
+- kind: project-relative
+  target: claude
+  value: .claude/skills/deploy-to-morhaf-vps/references/vps-application-contract.md
+  runtime: null
+  scope: project
+  owners:
+  - morhaf-labs/agent-config
+  - .
+  active_owner: morhaf-labs/agent-config
+  content_hash: sha256:71ca8a3ed91a4a7340574fedccd868a59d81618b28616966e75674f90d3d8078
+- kind: project-relative
+  target: codex
+  value: .agents/skills/deploy-to-morhaf-vps
+  runtime: null
+  scope: project
+  owners:
+  - morhaf-labs/agent-config
+  - .
+  active_owner: morhaf-labs/agent-config
+  content_hash: null
+- kind: project-relative
+  target: codex
+  value: .agents/skills/deploy-to-morhaf-vps/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - morhaf-labs/agent-config
+  - .
+  active_owner: morhaf-labs/agent-config
+  content_hash: sha256:f3703ce2f0793f8c132e9f38eaca83a36a6a9c0d179501513198638cd17a0f9c
+- kind: project-relative
+  target: codex
+  value: .agents/skills/deploy-to-morhaf-vps/references/post-release-verification.md
+  runtime: null
+  scope: project
+  owners:
+  - morhaf-labs/agent-config
+  - .
+  active_owner: morhaf-labs/agent-config
+  content_hash: sha256:794a628a05a1b2b4f32f2c255cf583d18889c196a0445dcd1af19d7d5a370fb6
+- kind: project-relative
+  target: codex
+  value: .agents/skills/deploy-to-morhaf-vps/references/release-caller-review.md
+  runtime: null
+  scope: project
+  owners:
+  - morhaf-labs/agent-config
+  - .
+  active_owner: morhaf-labs/agent-config
+  content_hash: sha256:84617acf73abc77cd28d16cfce326bded214a7bb99ffa5a20ac175f016b2f17a
+- kind: project-relative
+  target: codex
+  value: .agents/skills/deploy-to-morhaf-vps/references/runtime-ownership.md
+  runtime: null
+  scope: project
+  owners:
+  - morhaf-labs/agent-config
+  - .
+  active_owner: morhaf-labs/agent-config
+  content_hash: sha256:7ce12dc092731059361f5bf29ddca0f27ceb8ac06436f7e1d68724309e6c8ad5
+- kind: project-relative
+  target: codex
+  value: .agents/skills/deploy-to-morhaf-vps/references/vps-application-contract.md
+  runtime: null
+  scope: project
+  owners:
+  - morhaf-labs/agent-config
+  - .
+  active_owner: morhaf-labs/agent-config
+  content_hash: sha256:71ca8a3ed91a4a7340574fedccd868a59d81618b28616966e75674f90d3d8078
+local_deployed_files:
+- .agents/skills/deploy-to-morhaf-vps
+- .agents/skills/deploy-to-morhaf-vps/SKILL.md
+- .agents/skills/deploy-to-morhaf-vps/references/post-release-verification.md
+- .agents/skills/deploy-to-morhaf-vps/references/release-caller-review.md
+- .agents/skills/deploy-to-morhaf-vps/references/runtime-ownership.md
+- .agents/skills/deploy-to-morhaf-vps/references/vps-application-contract.md
+- .claude/skills/deploy-to-morhaf-vps
+- .claude/skills/deploy-to-morhaf-vps/SKILL.md
+- .claude/skills/deploy-to-morhaf-vps/references/post-release-verification.md
+- .claude/skills/deploy-to-morhaf-vps/references/release-caller-review.md
+- .claude/skills/deploy-to-morhaf-vps/references/runtime-ownership.md
+- .claude/skills/deploy-to-morhaf-vps/references/vps-application-contract.md
+local_deployed_file_hashes:
+  .agents/skills/deploy-to-morhaf-vps/SKILL.md: sha256:f3703ce2f0793f8c132e9f38eaca83a36a6a9c0d179501513198638cd17a0f9c
+  .agents/skills/deploy-to-morhaf-vps/references/post-release-verification.md: sha256:794a628a05a1b2b4f32f2c255cf583d18889c196a0445dcd1af19d7d5a370fb6
+  .agents/skills/deploy-to-morhaf-vps/references/release-caller-review.md: sha256:84617acf73abc77cd28d16cfce326bded214a7bb99ffa5a20ac175f016b2f17a
+  .agents/skills/deploy-to-morhaf-vps/references/runtime-ownership.md: sha256:7ce12dc092731059361f5bf29ddca0f27ceb8ac06436f7e1d68724309e6c8ad5
+  .agents/skills/deploy-to-morhaf-vps/references/vps-application-contract.md: sha256:71ca8a3ed91a4a7340574fedccd868a59d81618b28616966e75674f90d3d8078
+  .claude/skills/deploy-to-morhaf-vps/SKILL.md: sha256:f3703ce2f0793f8c132e9f38eaca83a36a6a9c0d179501513198638cd17a0f9c
+  .claude/skills/deploy-to-morhaf-vps/references/post-release-verification.md: sha256:794a628a05a1b2b4f32f2c255cf583d18889c196a0445dcd1af19d7d5a370fb6
+  .claude/skills/deploy-to-morhaf-vps/references/release-caller-review.md: sha256:84617acf73abc77cd28d16cfce326bded214a7bb99ffa5a20ac175f016b2f17a
+  .claude/skills/deploy-to-morhaf-vps/references/runtime-ownership.md: sha256:7ce12dc092731059361f5bf29ddca0f27ceb8ac06436f7e1d68724309e6c8ad5
+  .claude/skills/deploy-to-morhaf-vps/references/vps-application-contract.md: sha256:71ca8a3ed91a4a7340574fedccd868a59d81618b28616966e75674f90d3d8078

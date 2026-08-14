@@ -17,7 +17,8 @@ targets:
   - copilot
 includes: auto
 dependencies:
-  apm: []
+  apm:
+    - morhaf-labs/agent-config#v0.1.1
   mcp: []
 devDependencies:
   apm: []
