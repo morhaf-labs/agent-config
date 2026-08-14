@@ -1,5 +1,5 @@
 name: agent-config
-version: 0.1.0
+version: 0.1.1
 description: Non-secret Morhaf Labs project conventions for coding agents
 author:
   name: Morhaf Labs
