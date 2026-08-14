@@ -15,9 +15,15 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  # **Local rather than a caller of the organization's shared workflow-security
+  # workflow, and that is the visibility boundary rather than an oversight.** This
+  # repository is public, and a public repository cannot call a private reusable
+  # workflow at all - the attempt produces a zero-second run with no job and no
+  # explanation. The same reason keeps LICENSE, SECURITY.md and the contribution
+  # guidance local instead of inherited.
   package:
     name: Package and target validation
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-2vcpu-ubuntu-2404
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
@@ -33,7 +39,11 @@ jobs:
         run: python -m unittest discover -s tests -v
 
       - name: Validate skill structure
-        run: agentskills validate .apm/skills/deploy-to-morhaf-vps
+        shell: bash
+        run: |
+          for skill in .apm/skills/*/; do
+            agentskills validate "${skill%/}"
+          done
 
       - name: Audit publishable content
         shell: bash
@@ -55,9 +65,36 @@ jobs:
           test "${#bundles[@]}" -eq 1
           bundle="${bundles[0]}"
           python tests/verify_release.py "$bundle"
+
+          # Unrelated local guidance that installation must leave alone. Written before
+          # the install rather than checked after it, because "it was not touched" is
+          # only meaningful if it was there to touch.
+          mkdir -p "$install_dir/.agents/skills/an-unrelated-local-skill"
+          printf 'local guidance this package does not own\n' \
+            > "$install_dir/.agents/skills/an-unrelated-local-skill/SKILL.md"
+          printf 'local notes\n' > "$install_dir/AGENTS.md"
+
           apm install "$bundle" --dry-run --target codex,copilot,claude --root "$install_dir" --no-policy
           apm install "$bundle" --target codex,copilot,claude --root "$install_dir" --no-policy
-          diff -r .apm/skills/deploy-to-morhaf-vps "$install_dir/.agents/skills/deploy-to-morhaf-vps"
-          diff -r .apm/skills/deploy-to-morhaf-vps "$install_dir/.claude/skills/deploy-to-morhaf-vps"
+
+          # Every declared skill, for every supported target.
+          for skill in .apm/skills/*/; do
+            name="$(basename "${skill%/}")"
+            diff -r "$skill" "$install_dir/.agents/skills/$name"
+            diff -r "$skill" "$install_dir/.claude/skills/$name"
+          done
+
+          grep -qx 'local guidance this package does not own' \
+            "$install_dir/.agents/skills/an-unrelated-local-skill/SKILL.md"
+          grep -qx 'local notes' "$install_dir/AGENTS.md"
+
+          # Package-owned drift: change an installed file and require the audit to say
+          # so. Without this, "no drift" and "the detector never runs" look identical.
+          printf '\ndrift\n' >> "$install_dir/.agents/skills/deploy-to-morhaf-vps/SKILL.md"
+          if (cd "$install_dir" && apm audit --ci --no-policy --no-fail-fast); then
+            echo "::error::drift in a package-owned file was not detected"
+            exit 1
+          fi
+
           git diff --exit-code
           test -z "$(git status --short)"
