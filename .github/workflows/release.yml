@@ -21,6 +21,58 @@ jobs:
       - uses: microsoft/apm-action@d723bb64ed70c135bbaf87d126b721dd2dae0439 # v1.10.0
         with:
           apm-version: 0.28.0
-          mode: release
+          setup-only: true
+
+      # APM action v1.10.0 release mode still expects a tar.gz after APM 0.28.0
+      # packs single-plugin repositories as ZIP. Remove this adapter when upstream
+      # release mode accepts the ZIP it documents.
+      - name: Pack and verify release
+        id: package
+        shell: bash
+        run: |
+          package_version="$(sed -n 's/^version: //p' apm.yml)"
+          [[ "$package_version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]
+          expected_tag="v${package_version}"
+          test "$GITHUB_REF_NAME" = "$expected_tag"
+
+          apm pack --check-versions --check-clean --json
+          apm pack --offline --archive --marketplace none --output dist
+
+          shopt -s nullglob
+          bundles=(dist/agent-config-*.zip)
+          test "${#bundles[@]}" -eq 1
+          bundle="${bundles[0]}"
+
+          python tests/verify_release.py "$bundle"
+          bundle_name="${bundle##*/}"
+          (cd dist && sha256sum "$bundle_name" > "$bundle_name.sha256")
+
+          verify_dir="$(mktemp -d)"
+          cp "$bundle" "$bundle.sha256" "$verify_dir/"
+          (cd "$verify_dir" && sha256sum -c "$bundle_name.sha256")
+
+          {
+            echo "bundle=$bundle"
+            echo "sidecar=$bundle.sha256"
+            echo "bundle_name=$bundle_name"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Publish verified release
+        shell: bash
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BUNDLE: ${{ steps.package.outputs.bundle }}
+          BUNDLE_NAME: ${{ steps.package.outputs.bundle_name }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SIDECAR: ${{ steps.package.outputs.sidecar }}
+        run: |
+          bundle_sha256="$(cut -d ' ' -f 1 "$SIDECAR")"
+          notes="$(mktemp)"
+          printf "## Package\n\n| Bundle | SHA-256 |\n| --- | --- |\n| \`%s\` | \`%s\` |\n\nVerify with \`sha256sum -c %s.sha256\`.\n" \
+            "$BUNDLE_NAME" "$bundle_sha256" "$BUNDLE_NAME" > "$notes"
+
+          gh release create "$GITHUB_REF_NAME" \
+            "$BUNDLE" \
+            "$SIDECAR" \
+            --verify-tag \
+            --title "$GITHUB_REF_NAME" \
+            --notes-file "$notes"

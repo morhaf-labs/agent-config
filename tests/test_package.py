@@ -91,6 +91,30 @@ class PackageStructureTests(unittest.TestCase):
         self.assertIn("scripts: {}", manifest)
 
 
+class ReleaseWorkflowTests(unittest.TestCase):
+    def setUp(self):
+        self.workflow = (ROOT / ".github" / "workflows" / "release.yml").read_text()
+
+    def test_tag_must_match_manifest_version(self):
+        self.assertIn('expected_tag="v${package_version}"', self.workflow)
+        self.assertIn('test "$GITHUB_REF_NAME" = "$expected_tag"', self.workflow)
+
+    def test_sidecar_verifies_in_downloaded_layout(self):
+        self.assertIn(
+            '(cd dist && sha256sum "$bundle_name" > "$bundle_name.sha256")',
+            self.workflow,
+        )
+        self.assertIn(
+            '(cd "$verify_dir" && sha256sum -c "$bundle_name.sha256")',
+            self.workflow,
+        )
+
+    def test_token_is_exposed_only_to_publish_step(self):
+        pack, publish = self.workflow.split("      - name: Publish verified release\n", 1)
+        self.assertNotIn("GH_TOKEN:", pack)
+        self.assertIn("GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}", publish)
+
+
 class FixturePolicyTests(unittest.TestCase):
     def test_reference_shapes(self):
         for name in (
