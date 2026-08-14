@@ -1,0 +1,11 @@
+{
+  "name": "unknown-component",
+  "components": [
+    {
+      "path": "experimental/**",
+      "runtime": "unknown",
+      "direct_actions": []
+    }
+  ],
+  "expected_owners": ["stop"]
+}

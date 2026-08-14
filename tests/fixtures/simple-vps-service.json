@@ -1,0 +1,27 @@
+{
+  "name": "simple-vps-service",
+  "components": [
+    {
+      "path": "service/**",
+      "runtime": "vps",
+      "platform_application": "example-service",
+      "workflow": {
+        "uses": "morhaf-labs/vps-infra-v2/.github/workflows/deploy-to-platform.yml@54ed7b8113c961802b377f0701426f763e1e7be4",
+        "inputs": ["app", "dockerfile"],
+        "credentials": ["PLATFORM_APP_PRIVATE_KEY"]
+      },
+      "application": {
+        "tier": "burstable",
+        "memory": "256Mi",
+        "memoryRequest": "128Mi",
+        "cpu": "500m",
+        "cpuRequest": "100m",
+        "port": 8080,
+        "health": "/health",
+        "user": 1000
+      },
+      "direct_actions": []
+    }
+  ],
+  "expected_owners": ["vps-infra-v2"]
+}

@@ -1,0 +1,36 @@
+{
+  "name": "full-vps-application",
+  "components": [
+    {
+      "path": "api/**",
+      "runtime": "vps",
+      "platform_application": "example-full-app",
+      "workflow": {
+        "uses": "morhaf-labs/vps-infra-v2/.github/workflows/deploy-to-platform.yml@54ed7b8113c961802b377f0701426f763e1e7be4",
+        "inputs": ["app", "dockerfile", "ref"],
+        "credentials": ["PLATFORM_APP_PRIVATE_KEY"]
+      },
+      "application": {
+        "tier": "burstable",
+        "memory": "384Mi",
+        "memoryRequest": "64Mi",
+        "cpu": "1000m",
+        "cpuRequest": "100m",
+        "port": 8080,
+        "health": "/readyz",
+        "user": 65532,
+        "migration": true,
+        "tasks": ["import-data", "serving-check"],
+        "volume": {
+          "size": "10Gi",
+          "path": "/data"
+        },
+        "data": {
+          "connectionLimit": 20
+        }
+      },
+      "direct_actions": []
+    }
+  ],
+  "expected_owners": ["vps-infra-v2"]
+}
