@@ -1,0 +1,22 @@
+{
+  "repository": "vps-infra",
+  "lifecycle": "legacy",
+  "lifecycle_confirmed": false,
+  "shape": "infrastructure",
+  "visibility": "private",
+  "proposed_work": "none",
+  "renovate": {
+    "extends_organization_baseline": true,
+    "local_minimum_release_age_days": null,
+    "automerge_non_security_major": false,
+    "ignore_tests": false,
+    "second_update_producer": false,
+    "stricter_exceptions": []
+  },
+  "workflows": [],
+  "components": [],
+  "expected": {
+    "owners": [],
+    "action": "stop"
+  }
+}

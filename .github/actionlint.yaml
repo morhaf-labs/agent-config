@@ -1,0 +1,6 @@
+# Blacksmith runs the Linux jobs here as everywhere else in the organization.
+# actionlint only knows GitHub's own labels, so without this every job reads as an
+# unknown runner and a real finding would be lost among them.
+self-hosted-runner:
+  labels:
+    - blacksmith-2vcpu-ubuntu-2404

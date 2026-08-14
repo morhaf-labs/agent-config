@@ -66,22 +66,44 @@ def validate_fixture(fixture):
 
 
 class PackageStructureTests(unittest.TestCase):
-    def test_package_contains_one_skill_and_no_stronger_primitive(self):
+    # An exact set rather than a length check, so a third skill stays a deliberate
+    # decision instead of arriving because a test only counted.
+    def test_package_contains_the_declared_skills_and_no_stronger_primitive(self):
         skill_root = ROOT / ".apm" / "skills"
-        self.assertEqual([path.name for path in skill_root.iterdir()], ["deploy-to-morhaf-vps"])
+        self.assertEqual(
+            sorted(path.name for path in skill_root.iterdir()),
+            ["deploy-to-morhaf-vps", "morhaf-labs-project-standards"],
+        )
         for prohibited in ("agents", "prompts", "hooks", "bin", "mcp"):
             self.assertFalse((ROOT / ".apm" / prohibited).exists())
 
     def test_skill_frontmatter_and_references(self):
-        skill = (ROOT / ".apm" / "skills" / "deploy-to-morhaf-vps" / "SKILL.md").read_text()
-        self.assertTrue(skill.startswith("---\nname: deploy-to-morhaf-vps\ndescription: Use when"))
-        for name in (
-            "runtime-ownership.md",
-            "vps-application-contract.md",
-            "release-caller-review.md",
-            "post-release-verification.md",
-        ):
-            self.assertTrue((ROOT / ".apm" / "skills" / "deploy-to-morhaf-vps" / "references" / name).is_file())
+        expected = {
+            "deploy-to-morhaf-vps": (
+                "runtime-ownership.md",
+                "vps-application-contract.md",
+                "release-caller-review.md",
+                "post-release-verification.md",
+            ),
+            "morhaf-labs-project-standards": (
+                "repository-classification.md",
+                "dependency-policy.md",
+                "blacksmith-ci.md",
+                "workflow-security.md",
+                "project-shape-routing.md",
+                "governance.md",
+                "public-repositories.md",
+            ),
+        }
+        for skill_name, references in expected.items():
+            with self.subTest(skill=skill_name):
+                skill_dir = ROOT / ".apm" / "skills" / skill_name
+                skill = (skill_dir / "SKILL.md").read_text()
+                self.assertTrue(
+                    skill.startswith(f"---\nname: {skill_name}\ndescription: Use when")
+                )
+                for name in references:
+                    self.assertTrue((skill_dir / "references" / name).is_file(), name)
 
     def test_manifest_has_no_marketplace_or_executable_dependency(self):
         manifest = (ROOT / "apm.yml").read_text()

@@ -1,0 +1,74 @@
+{
+  "repository": "bot-berlin",
+  "lifecycle": "active",
+  "lifecycle_confirmed": true,
+  "shape": "hybrid",
+  "visibility": "private",
+  "proposed_work": "adopt-standards",
+  "renovate": {
+    "extends_organization_baseline": true,
+    "local_minimum_release_age_days": null,
+    "automerge_non_security_major": false,
+    "ignore_tests": false,
+    "second_update_producer": false,
+    "stricter_exceptions": [
+      {
+        "package": "playwright",
+        "minimum_release_age_days": 7
+      }
+    ]
+  },
+  "workflows": [
+    {
+      "name": "ci",
+      "runs_on": "blacksmith-2vcpu-ubuntu-2404",
+      "permissions": {
+        "contents": "read"
+      },
+      "timeout_minutes": 10,
+      "triggers": [
+        "pull_request"
+      ],
+      "action_refs": [
+        "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1"
+      ],
+      "secrets": [],
+      "shared_workflow_security": "morhaf-labs/.github/.github/workflows/workflow-security.yml@c408b8ef3ba4c64a25cf34424f478f6491118d9d"
+    },
+    {
+      "name": "runner",
+      "runs_on": "self-hosted",
+      "permissions": {
+        "contents": "read"
+      },
+      "timeout_minutes": 10,
+      "triggers": [
+        "pull_request"
+      ],
+      "action_refs": [
+        "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1"
+      ],
+      "secrets": [],
+      "shared_workflow_security": "morhaf-labs/.github/.github/workflows/workflow-security.yml@c408b8ef3ba4c64a25cf34424f478f6491118d9d"
+    }
+  ],
+  "components": [
+    {
+      "name": "web",
+      "runtime": "cloudflare",
+      "vps_workflow": null
+    },
+    {
+      "name": "runner",
+      "runtime": "vps",
+      "vps_workflow": "morhaf-labs/vps-infra-v2/.github/workflows/deploy-to-platform.yml@3d3c42e5aac5ba805825da76410c181273ba90b1"
+    }
+  ],
+  "expected": {
+    "owners": [
+      "cloudflare-founder-stack-v2",
+      "vps-infra-v2"
+    ],
+    "action": "adopt"
+  }
+}

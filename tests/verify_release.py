@@ -13,11 +13,22 @@ EXPECTED_FILES = {
     "skills/deploy-to-morhaf-vps/references/release-caller-review.md",
     "skills/deploy-to-morhaf-vps/references/runtime-ownership.md",
     "skills/deploy-to-morhaf-vps/references/vps-application-contract.md",
+    "skills/morhaf-labs-project-standards/SKILL.md",
+    "skills/morhaf-labs-project-standards/references/blacksmith-ci.md",
+    "skills/morhaf-labs-project-standards/references/dependency-policy.md",
+    "skills/morhaf-labs-project-standards/references/governance.md",
+    "skills/morhaf-labs-project-standards/references/project-shape-routing.md",
+    "skills/morhaf-labs-project-standards/references/public-repositories.md",
+    "skills/morhaf-labs-project-standards/references/repository-classification.md",
+    "skills/morhaf-labs-project-standards/references/workflow-security.md",
 }
 FORBIDDEN_CONTENT = (
     re.compile(rb"-----BEGIN [A-Z ]*PRIVATE KEY-----"),
     re.compile(rb"\bgh[pousr]_[A-Za-z0-9]{20,}\b"),
     re.compile(rb"(?i)\b(password|private[_-]?key|secret|token)\s*[:=]\s*['\"][^'\"]+['\"]"),
+    # The package is public and describes private repositories. Naming an owner is
+    # intended; carrying its hostnames, stack names or tailnet tags is not.
+    re.compile(rb"(?i)(morhaf\.dev|\bcpu555\b|\btag:(ci|vps|k8s)\b)"),
 )
 
 

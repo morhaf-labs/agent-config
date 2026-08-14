@@ -1,0 +1,65 @@
+{
+  "repository": "agent-config",
+  "lifecycle": "active",
+  "lifecycle_confirmed": true,
+  "shape": "public-producer",
+  "visibility": "public",
+  "proposed_work": "adopt-standards",
+  "renovate": {
+    "extends_organization_baseline": true,
+    "local_minimum_release_age_days": null,
+    "automerge_non_security_major": false,
+    "ignore_tests": false,
+    "second_update_producer": false,
+    "stricter_exceptions": []
+  },
+  "workflows": [
+    {
+      "name": "validate",
+      "runs_on": "blacksmith-2vcpu-ubuntu-2404",
+      "permissions": {
+        "contents": "read"
+      },
+      "timeout_minutes": 10,
+      "triggers": [
+        "pull_request"
+      ],
+      "action_refs": [
+        "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1"
+      ],
+      "secrets": [],
+      "shared_workflow_security": null
+    },
+    {
+      "name": "release",
+      "runs_on": "blacksmith-2vcpu-ubuntu-2404",
+      "permissions": {
+        "contents": "write"
+      },
+      "timeout_minutes": 10,
+      "triggers": [
+        "push"
+      ],
+      "action_refs": [
+        "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1"
+      ],
+      "secrets": [
+        "GITHUB_TOKEN"
+      ],
+      "shared_workflow_security": null
+    }
+  ],
+  "components": [],
+  "expected": {
+    "owners": [],
+    "action": "adopt"
+  },
+  "community_health": {
+    "license": true,
+    "security_policy": true,
+    "contributing": true,
+    "secret_scanning": true,
+    "push_protection": true,
+    "release_checksums": true
+  }
+}
