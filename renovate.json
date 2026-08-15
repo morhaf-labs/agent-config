@@ -1,0 +1,13 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["local>morhaf-labs/.github:renovate-config"],
+
+  "packageRules": [
+    {
+      "description": "APM is what installs and locks this package for every consumer, and agentskills is what validates a skill's structure. A version bump here changes the tool the release is built and verified with, so it is read rather than merged automatically.",
+      "matchPackageNames": ["apm-cli", "skills-ref"],
+      "automerge": false,
+      "dependencyDashboardApproval": true
+    }
+  ]
+}
