@@ -2,10 +2,19 @@
 
 Versioned, non-secret agent guidance for Morhaf Labs projects.
 
-This repository is an APM package. Its first and only primitive is
-`deploy-to-morhaf-vps`, a skill that helps an agent identify the runtime owner of a
-changed component and reuse the existing Morhaf Labs deployment contract. It contains
-guidance and test fixtures only. It does not deploy anything and grants no authority.
+This repository is an APM package. It contains guidance and test fixtures only: it deploys
+nothing, runs nothing, and grants no authority. Every primitive it carries is a skill.
+
+## Capabilities
+
+What installing this package provides. Package validation asserts this list against the
+skills actually present, so a capability cannot be claimed here without shipping and cannot
+ship without being named here.
+
+| Capability | Value |
+| --- | --- |
+| `morhaf-labs-project-standards` | Classifies a repository before anything about it is changed, routes a new project to the declared source for its shape - including the initialization path for a request-driven SaaS - and refuses the automation failures the organization has already paid for once: a GitHub-hosted runner, a mutable action reference, a widened workflow permission, a weakened dependency policy, an invented deployment target, and maintenance on a repository nobody has confirmed is still live. |
+| `deploy-to-morhaf-vps` | Identifies the runtime owner of a changed component and reuses the existing Morhaf Labs VPS deployment contract rather than writing a second one, and refuses direct infrastructure or cluster mutation. Stays dormant for a component whose runtime owner is Cloudflare. |
 
 ## Public content boundary
 
@@ -27,12 +36,16 @@ than a public issue.
 apm.yml
 plugin.json
 .apm/skills/deploy-to-morhaf-vps/
+.apm/skills/morhaf-labs-project-standards/
 tests/
 ```
 
-The skill uses references for detailed runtime ownership, the VPS application
-contract, release caller review and post-release verification. APM owns installation,
-target routing, locking, content integrity and package-owned drift detection.
+Each skill keeps its detail in references rather than in one long instruction: runtime
+ownership, the VPS application contract, release caller review and post-release verification
+for the deployment skill; classification, project-shape routing, SaaS creation, dependency
+policy, Blacksmith CI, workflow security, governance and public-repository baselines for the
+standards skill. APM owns installation, target routing, locking, content integrity and
+package-owned drift detection.
 
 ## Toolchain and checks
 
@@ -48,14 +61,14 @@ Run:
 mise install
 python -m unittest discover -s tests -v
 agentskills validate .apm/skills/deploy-to-morhaf-vps
+agentskills validate .apm/skills/morhaf-labs-project-standards
 apm audit --ci --no-policy
 apm pack --dry-run --marketplace none --verbose
 ```
 
 `apm compile` is intentionally absent. It validates instruction and agent compilation,
-while this package contains only a skill. CI packs the skill into an integrity-locked
-archive, audits that artifact, and installs it into clean Codex, Copilot and Claude
-targets.
+while this package contains only skills. CI packs them into an integrity-locked archive,
+audits that artifact, and installs it into clean Codex, Copilot and Claude targets.
 
 Releases are reviewed pull requests followed by immutable `v*` tags. CI builds and
 audits the release artifact; release notes are generated from the reviewed artifact.

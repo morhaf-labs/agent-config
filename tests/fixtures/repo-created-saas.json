@@ -1,0 +1,74 @@
+{
+  "repository": "new-product-idea",
+  "lifecycle": "active",
+  "lifecycle_confirmed": true,
+  "shape": "saas",
+  "visibility": "private",
+  "proposed_work": "create",
+  "creation": {
+    "template": "founder-stack-v2",
+    "catalog": {
+      "profiles": [
+        "solo-saas",
+        "team-saas"
+      ],
+      "capabilities": [
+        "polar",
+        "posthog",
+        "ai-openai",
+        "r2",
+        "background-work",
+        "aidbase",
+        "signupgate"
+      ]
+    },
+    "profile": "solo-saas",
+    "selected_capabilities": [
+      "aidbase",
+      "signupgate"
+    ],
+    "structure": "generated",
+    "initialization_completed": false
+  },
+  "renovate": {
+    "extends_organization_baseline": true,
+    "local_minimum_release_age_days": null,
+    "automerge_non_security_major": false,
+    "ignore_tests": false,
+    "second_update_producer": false,
+    "stricter_exceptions": []
+  },
+  "workflows": [
+    {
+      "name": "ci",
+      "runs_on": "blacksmith-2vcpu-ubuntu-2404",
+      "permissions": {
+        "contents": "read"
+      },
+      "timeout_minutes": 20,
+      "triggers": [
+        "pull_request",
+        "push"
+      ],
+      "action_refs": [
+        "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+        "oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6"
+      ],
+      "secrets": [],
+      "shared_workflow_security": "morhaf-labs/.github/.github/workflows/workflow-security.yml@c408b8ef3ba4c64a25cf34424f478f6491118d9d"
+    }
+  ],
+  "components": [
+    {
+      "name": "web",
+      "runtime": "cloudflare",
+      "vps_workflow": null
+    }
+  ],
+  "expected": {
+    "owners": [
+      "cloudflare-founder-stack-v2"
+    ],
+    "action": "create"
+  }
+}

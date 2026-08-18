@@ -1,6 +1,6 @@
 ---
 name: morhaf-labs-project-standards
-description: Use when creating, adopting, auditing or changing repository automation for a Morhaf Labs project, including new repository setup, GitHub Actions runners and permissions, dependency update policy, branch and release protection, project-shape selection, public-repository baselines, and deciding whether a repository is still maintained. Classify the repository before changing anything, and reuse the owning automation rather than restating it.
+description: Use when creating, adopting, auditing or changing repository automation for a Morhaf Labs project, including starting a new Morhaf Labs project from a described product idea before any repository exists, new repository setup, GitHub Actions runners and permissions, dependency update policy, branch and release protection, project-shape selection, public-repository baselines, and deciding whether a repository is still maintained. Classify the repository before changing anything, and reuse the owning automation rather than restating it.
 ---
 
 # Morhaf Labs project standards
@@ -23,7 +23,9 @@ value; nothing in this package is the source of truth for one.
    whose lifecycle nobody has confirmed.
 3. For a new project, read [project shape routing](references/project-shape-routing.md)
    and start from the declared source for that shape. Membership in the organization
-   implies no deployment target.
+   implies no deployment target. For a request-driven SaaS, continue to
+   [creating a request-driven SaaS](references/founder-stack-v2.md) - it owns the
+   initialization path, and the template owns the profile and module sets.
 4. For dependency work, read [dependency policy](references/dependency-policy.md).
 5. For GitHub Actions work, read [Blacksmith CI](references/blacksmith-ci.md) and
    [workflow security](references/workflow-security.md).

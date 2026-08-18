@@ -18,6 +18,21 @@ def load_fixture(name):
     return json.loads((FIXTURES / name).read_text())
 
 
+def documented_capabilities():
+    """Capability name -> value, read from the README capability table."""
+    document = (ROOT / "README.md").read_text().split("\n## Capabilities\n", 1)
+    if len(document) == 1:
+        return {}
+    section = document[1].split("\n## ", 1)[0]
+    rows = {}
+    for line in section.splitlines():
+        cells = [cell.strip() for cell in line.split("|")[1:-1]]
+        if len(cells) != 2 or cells[0] in ("Capability", "---"):
+            continue
+        rows[cells[0].strip("`")] = cells[1]
+    return rows
+
+
 def validate_component(component):
     runtime = component["runtime"]
     actions = [action.lower() for action in component.get("direct_actions", [])]
@@ -91,6 +106,7 @@ class PackageStructureTests(unittest.TestCase):
                 "blacksmith-ci.md",
                 "workflow-security.md",
                 "project-shape-routing.md",
+                "founder-stack-v2.md",
                 "governance.md",
                 "public-repositories.md",
             ),
@@ -104,6 +120,21 @@ class PackageStructureTests(unittest.TestCase):
                 )
                 for name in references:
                     self.assertTrue((skill_dir / "references" / name).is_file(), name)
+
+    # Set equality against the installed skills, never an assertion on sentences: a claim
+    # about what the package provides must not outlive the primitive it describes, and the
+    # stale "first and only primitive" line this replaced is the evidence that one place is
+    # already hard enough to keep true.
+    def test_documented_capabilities_match_the_installed_skills(self):
+        self.assertEqual(
+            set(documented_capabilities()),
+            {path.name for path in (ROOT / ".apm" / "skills").iterdir()},
+        )
+
+    def test_every_documented_capability_carries_a_value(self):
+        for capability, value in documented_capabilities().items():
+            with self.subTest(capability=capability):
+                self.assertTrue(value.strip())
 
     def test_manifest_has_no_marketplace_or_executable_dependency(self):
         manifest = (ROOT / "apm.yml").read_text()
