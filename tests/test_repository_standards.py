@@ -79,6 +79,36 @@ def check_renovate(repo):
             raise ValueError("local exception loosens the organization lane")
 
 
+def check_creation(repo):
+    """Route a project-creation declaration, or raise the specific refusal.
+
+    The catalog is read from the declaration rather than held here. The template owns the
+    profile and capability sets; a copy in this file would need an edit every time the
+    template gained a module, which is the exact cost this package is supposed to avoid.
+    The fixture's catalog block is therefore what the agent read, not a source of truth.
+    """
+    creation = repo["creation"]
+    catalog = creation["catalog"]
+
+    if repo["shape"] == "unknown":
+        raise ValueError("template chosen before the project shape is classified")
+    if not creation["template"]:
+        raise ValueError("project created without a declared source template")
+    if creation["profile"] not in catalog["profiles"]:
+        raise ValueError("profile outside the declared catalog")
+
+    invented = sorted(set(creation["selected_capabilities"]) - set(catalog["capabilities"]))
+    if invented:
+        raise ValueError(f"capability invented outside the declared catalog: {invented}")
+
+    if creation["structure"] != "generated":
+        raise ValueError("hand-scaffolded application structure in place of the generator")
+    if creation["initialization_completed"]:
+        raise ValueError("rerun of a completed initialization")
+
+    return "create"
+
+
 def check_workflow(workflow, visibility):
     runs_on = workflow["runs_on"]
     if not EXPRESSION.fullmatch(runs_on) and NATIVE_RUNNER.match(runs_on):
@@ -151,6 +181,9 @@ def validate_repository(repo):
     for workflow in repo["workflows"]:
         check_workflow(workflow, repo["visibility"])
 
+    if repo["proposed_work"] == "create":
+        action = check_creation(repo)
+
     owners = [route_component(c, repo["shape"]) for c in repo["components"]]
     if "stop" in owners:
         action = "stop"
@@ -200,6 +233,63 @@ class ShapeCoverageTests(unittest.TestCase):
     def test_hybrid_keeps_each_component_with_its_own_owner(self):
         result = validate_repository(load("repo-hybrid-application.json"))
         self.assertEqual(result["owners"], ["cloudflare-founder-stack-v2", "vps-infra-v2"])
+
+
+class CreationTests(unittest.TestCase):
+    """Creating a project, held by the same fixture-and-model pattern as every refusal here."""
+
+    def test_creating_a_saas_routes_to_the_cloudflare_owner(self):
+        result = validate_fixture(load("repo-created-saas.json"))
+        self.assertEqual(result, {"owners": ["cloudflare-founder-stack-v2"], "action": "create"})
+
+    # The deployment skill's contract must stay dormant for a creation that declares no
+    # long-running component: no owner here is the VPS platform.
+    def test_creation_declares_no_vps_owner(self):
+        result = validate_repository(load("repo-created-saas.json"))
+        self.assertNotIn("vps-infra-v2", result["owners"])
+
+    def test_rejects_a_capability_invented_outside_the_catalog(self):
+        repo = load("repo-created-saas.json")
+        repo["creation"]["selected_capabilities"].append("realtime-collaboration")
+        with self.assertRaisesRegex(ValueError, "invented outside the declared catalog"):
+            validate_repository(repo)
+
+    def test_rejects_a_profile_outside_the_catalog(self):
+        repo = load("repo-created-saas.json")
+        repo["creation"]["profile"] = "enterprise-saas"
+        with self.assertRaisesRegex(ValueError, "profile outside the declared catalog"):
+            validate_repository(repo)
+
+    def test_rejects_hand_authored_structure_in_place_of_the_generator(self):
+        repo = load("repo-created-saas.json")
+        repo["creation"]["structure"] = "hand-authored"
+        with self.assertRaisesRegex(ValueError, "hand-scaffolded application structure"):
+            validate_repository(repo)
+
+    def test_rejects_a_second_initialization(self):
+        repo = load("repo-created-saas.json")
+        repo["creation"]["initialization_completed"] = True
+        with self.assertRaisesRegex(ValueError, "rerun of a completed initialization"):
+            validate_repository(repo)
+
+    def test_rejects_a_template_chosen_before_the_shape_is_classified(self):
+        repo = load("repo-created-saas.json")
+        repo["shape"] = "unknown"
+        with self.assertRaisesRegex(ValueError, "before the project shape is classified"):
+            validate_repository(repo)
+
+    # A creation declaration is still a repository declaration: the lifecycle gate and the
+    # automation checks apply to it rather than being skipped because the work is new.
+    def test_creation_is_still_subject_to_the_repository_checks(self):
+        repo = load("repo-created-saas.json")
+        repo["workflows"][0]["runs_on"] = "ubuntu-latest"
+        with self.assertRaisesRegex(ValueError, "native GitHub-hosted runner"):
+            validate_repository(repo)
+
+        repo = load("repo-created-saas.json")
+        repo["lifecycle_confirmed"] = False
+        with self.assertRaisesRegex(ValueError, "unconfirmed or superseded repository"):
+            validate_repository(repo)
 
 
 class RunnerTests(unittest.TestCase):
@@ -397,7 +487,7 @@ class SkillContentTests(unittest.TestCase):
 
     def test_every_reference_the_workflow_names_exists(self):
         text = (SKILL / "SKILL.md").read_text()
-        referenced = set(re.findall(r"\(references/([a-z-]+\.md)\)", text))
+        referenced = set(re.findall(r"\(references/([a-z0-9-]+\.md)\)", text))
         present = {path.name for path in (SKILL / "references").iterdir()}
         self.assertEqual(referenced, present)
 

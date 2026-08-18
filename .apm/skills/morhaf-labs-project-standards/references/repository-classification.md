@@ -33,6 +33,9 @@ sibling's begins.
 | library | Published or consumed as a dependency, deploys nothing | None |
 | public producer | Distributes an artifact publicly | Its own release path |
 
+A SaaS being *created* rather than classified continues to
+[creating a request-driven SaaS](founder-stack-v2.md), after the shape above is settled.
+
 Shape is read from what the repository *declares* - a platform declaration, a release
 caller, a runtime target - not from what its code looks like. A repository that declares
 nothing has no shape yet, and that is a question rather than a default.

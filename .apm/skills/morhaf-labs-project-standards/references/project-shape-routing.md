@@ -14,6 +14,10 @@ running.
 | Library | Nothing to deploy | None | Do not add a deployment workflow |
 | Public producer | Its own release path | None | See [public repositories](public-repositories.md) |
 
+The request-driven SaaS row has its own path: read
+[creating a request-driven SaaS](founder-stack-v2.md) before proposing any command, and
+read it from the template rather than from memory.
+
 ## The two refusals
 
 **Do not adopt the VPS path implicitly.** A SaaS repository gets a VPS workflow only when

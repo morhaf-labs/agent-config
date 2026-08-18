@@ -16,6 +16,7 @@ EXPECTED_FILES = {
     "skills/morhaf-labs-project-standards/SKILL.md",
     "skills/morhaf-labs-project-standards/references/blacksmith-ci.md",
     "skills/morhaf-labs-project-standards/references/dependency-policy.md",
+    "skills/morhaf-labs-project-standards/references/founder-stack-v2.md",
     "skills/morhaf-labs-project-standards/references/governance.md",
     "skills/morhaf-labs-project-standards/references/project-shape-routing.md",
     "skills/morhaf-labs-project-standards/references/public-repositories.md",
