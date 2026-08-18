@@ -58,5 +58,5 @@
   the tag-to-manifest version test passes
 - [x] 5.4 Confirm the packed artifact carries no secret, private operational detail or executable
   step, and installs into clean Codex, Copilot and Claude targets
-- [ ] 5.5 Open the pull request, then tag the release once the companion `founder-stack-v2` change
+- [x] 5.5 Open the pull request, then tag the release once the companion `founder-stack-v2` change
   has landed so the reference describes a path that exists

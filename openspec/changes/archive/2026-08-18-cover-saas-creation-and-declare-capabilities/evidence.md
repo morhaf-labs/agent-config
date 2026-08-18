@@ -31,6 +31,40 @@ so the widening added a case rather than displacing one.
 with no VPS owner in the result, which is the dormancy claim held as a test rather than a
 sentence.
 
+## Release
+
+| What | Value |
+| --- | --- |
+| Release | `v0.3.0` |
+| Merge commit | `c5fc8a2` (squash of pull request #9) |
+| Package version | 0.3.0, in `apm.yml` and all three `plugin.json` manifests |
+| Assets | `agent-config-0.3.0.zip`, `agent-config-0.3.0.zip.sha256` |
+| Bundle SHA-256 | `76e9a6982a430d7c160272e72e0d12179805bf1229378331b862c5c8c0ca4434` |
+| `Release` on Blacksmith | Green on the tag, 23s. |
+
+Tagged after the companion `founder-stack-v2` change landed on its main branch, which is the
+ordering the plan required: the reference describes an initialization path, and tagging first
+would have published a description of something that did not exist yet.
+
+Squash merging is retained, for the reason the previous release recorded: this repository
+publishes a *package*, not commit SHAs for others to pin.
+
+### Verified after publication
+
+Downloaded from the release rather than trusted from the build:
+
+- The `.sha256` sidecar matches the downloaded bundle.
+- `tests/verify_release.py` verifies 16 declared files, one more than v0.2.0 - the new
+  reference.
+- All 14 guidance files are byte-identical to the reviewed source tree.
+- The published `plugin.json` carries 0.3.0.
+
+Worth noting for the next reader: the archive is rooted at `agent-config-0.3.0/`, not at the
+skill tree. A first pass at this verification compared paths without that prefix and reported
+the new reference absent while simultaneously reporting every guidance file identical - two
+results that cannot both be true, which is how the mistake surfaced. A check that can pass
+vacuously is worth distrusting until it has been made to fail.
+
 ## Checks
 
 Run locally on the branch, at package version 0.3.0.
